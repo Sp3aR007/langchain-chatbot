@@ -1,0 +1,1 @@
+RAG Medical Chatbot application using OpenAI LLM and Pinecone Vector Database.

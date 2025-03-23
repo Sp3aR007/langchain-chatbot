@@ -1,0 +1,13 @@
+# Environment Variables for API
+.env 
+
+# Package Egg Information
+Chatbot_Application.egg-info
+
+# Gradio Folder
+.gradio/
+
+# Environement
+venv/
+# Build Folder
+build/
