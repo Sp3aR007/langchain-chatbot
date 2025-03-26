@@ -86,5 +86,5 @@ demo=gr.ChatInterface(
 
 
 if __name__ == '__main__':
-    demo.launch()
+    demo.launch(server_name="0.0.0.0", server_port=7860)
     # app.run(host="0.0.0.0", port= 8080, debug= True)
