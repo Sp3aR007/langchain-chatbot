@@ -47,5 +47,5 @@ jobs:
     steps:
       - name: Run Application container in Docker. 
         run: |
-         docker run -d -p 7860:7860 -e PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }} -e GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} ${{ secrets.DOCKER_HUB_USERNAME }}/langchain-chatbot:sha-$${{ env.sha_short }}
+         docker run -d -p 7860:7860 -e PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }} -e GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} ${{ secrets.DOCKER_HUB_USERNAME }}/langchain-chatbot:sha-${{ env.sha_short }}
     
