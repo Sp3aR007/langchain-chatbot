@@ -41,6 +41,7 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
   deploy:
     runs-on: self-hosted
+    needs: [build]
     env:
       sha_short: ${{ needs.build.outputs.sha_short}}
     steps:
