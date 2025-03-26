@@ -1,34 +1,44 @@
-FROM --platform=$BUILDPLATFORM python:3.10.0-alpine@sha256:9e36371740748c3b72f10490a261a7d201a8e9f30bcd185769b37d3ca39dc2bd AS base
+# Use Debian-based Python 3.10 slim image
+FROM --platform=$BUILDPLATFORM python:3.10-slim AS base
 
+# Builder stage for installing dependencies
 FROM base AS builder
-RUN apk update \
-    && apk add --no-cache g++ linux-headers \
-    && rm -rf /var/cache/apk/*
-# get packages
-COPY requirements.txt .
-RUN pip install -r requirements.txt
 
+# Install required system packages for building dependencies
+RUN apt-get update && apt-get install -y \
+    gcc libffi-dev python3-dev rustc cargo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory for dependencies
+WORKDIR /dependencies
+
+# Copy dependency files
+COPY requirements.txt setup.py ./
+
+# Install dependencies in a temporary directory with binary wheels
+RUN pip install --no-cache-dir -r requirements.txt --target /dependencies/python --only-binary=:all:
+
+# Final runtime stage
 FROM base
+
 # Enable unbuffered logging
 ENV PYTHONUNBUFFERED=1
 
-RUN apk update \
-    && apk add --no-cache libstdc++ \
-    && rm -rf /var/cache/apk/*
+# runtime dependencies (minimal system packages)
+RUN apt-get update && apt-get install -y libffi-dev && rm -rf /var/lib/apt/lists/*
 
+# Set working directory for the application
 WORKDIR /app
 
-# Grab packages from builder
-COPY --from=builder /usr/local/lib/python3.12/ /usr/local/lib/python3.12/
+# Copy installed dependencies from builder stage
+COPY --from=builder /dependencies/python /usr/local/lib/python3.10/site-packages/
 
-# Add the application
+# Copy application code
 COPY . .
 
-# set listen port
+# Set listen port
 ENV PORT "7860"
 EXPOSE 7860
 
-# Ensure Vector Store is intialised before app
-RUN python store_index.py
-
-CMD ["python", "app.py"]
+# Ensure Vector Store is initialized before app runs
+ENTRYPOINT ["sh", "-c", "python store_index.py && exec python app.py"]

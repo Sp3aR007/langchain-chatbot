@@ -12,7 +12,7 @@ PINECONE_API_KEY=os.environ.get('PINECONE_API_KEY')
 os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
 
 
-extracted_data=load_pdf(data='Data/')
+extracted_data=load_pdf(data='data/')
 text_chunks=text_split(extracted_data)
 embeddings = download_huggingface_embeddings()
 
