@@ -11,3 +11,11 @@ Chatbot_Application.egg-info
 venv/
 # Build Folder
 build/
+
+
+# Terraform 
+
+terraform/.terraform/** 
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/.terraform.tfstate.lock.info

@@ -2,3 +2,4 @@
 ./build
 ./.env
 ./Chatbot_Application.egg-info
+terraform/**
