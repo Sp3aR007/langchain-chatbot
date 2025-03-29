@@ -7,14 +7,15 @@ resource "google_compute_instance" "vm_instance" {
   boot_disk {
     initialize_params {
       image = var.image
+      size = 15
     }
   }
 
-  metadata_startup_script = <<EOF
-    #!/bin/bash
-    sudo apt-get update -y
-    sudo apt-get install -y docker.io docker-buildx
-  EOF
+metadata_startup_script = <<-EOF
+#!/bin/bash 
+sudo apt-get update -y 
+sudo apt-get install -y docker.io docker-buildx
+EOF
   depends_on = [ google_compute_network.vpc_network ]
   network_interface {
     network    = google_compute_network.vpc_network.self_link
